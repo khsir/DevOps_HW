@@ -68,7 +68,7 @@ jobs:
     # Setup gcloud CLI
     - uses: google-github-actions/setup-gcloud@master
       with:
-        service_account_key: ${{ secrets.564a092376b5878cc4f3d842c91a6071939ca1b1 }}
+        service_account_key: ${{ secrets.MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCXGBM6pBV9HjA4 }}
         project_id: ${{ secrets.celestial-air-328108 }}
 
     # Get the GKE credentials so we can deploy to the cluster
