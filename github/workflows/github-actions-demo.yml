@@ -1,17 +1,95 @@
-name: GitHub Actions Demo
-on: [push]
+Skip to content
+Search or jump to…
+Pull requests
+Issues
+Marketplace
+Explore
+ 
+@khsir 
+google-github-actions
+/
+setup-gcloud
+Public
+55
+1.2k368
+Code
+Issues
+17
+Pull requests
+8
+Actions
+Security
+Insights
+setup-gcloud/example-workflows/gke/.github/workflows/gke.yml
+@FrodoTheTrue
+FrodoTheTrue chore: add gke simple example
+Latest commit 5b9d294 29 days ago
+ History
+ 8 contributors
+@averikitsch@sethvargo@bharathkkb@FrodoTheTrue@imjohnbo@craigdbarber@lewislbr@anthonymonori
+ 52 lines (44 sloc)  1.59 KB
+   
+# Copyright 2021 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+name: Deploy simple hello app to GKE
+
+on:
+  push:
+    branches:
+    - main
+
+env:
+  PROJECT_ID: ${{ secrets.GKE_PROJECT }}
+  GKE_CLUSTER: cluster-1    # TODO: update to cluster name
+  GKE_ZONE: europe-central2-a	   # TODO: update to cluster zone
+  DEPLOYMENT_NAME: gke-hello-app # TODO: update deployment name if changed in deployment.yaml
+
 jobs:
-  Explore-GitHub-Actions:
+  setup-and-deploy:
+    name: Setup and Deploy
     runs-on: ubuntu-latest
+
     steps:
-      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
-      - name: Check out repository code
-        uses: actions/checkout@v2
-      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
-      - run: echo "🖥️ The workflow is now ready to test your code on the runner."
-      - name: List files in the repository
-        run: |
-          ls ${{ github.workspace }}
-      - run: echo "🍏 This job's status is ${{ job.status }}."
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    # Setup gcloud CLI
+    - uses: google-github-actions/setup-gcloud@master
+      with:
+        service_account_key: ${{ secrets.GKE_SA_KEY }}
+        project_id: ${{ secrets.GKE_PROJECT }}
+
+    # Get the GKE credentials so we can deploy to the cluster
+    - run: |-
+        gcloud container clusters get-credentials "$GKE_CLUSTER" --zone "$GKE_ZONE"
+    # Deploy sample image to the GKE cluster
+    - name: Deploy
+      run: |-
+        kubectl apply -f deployment.yml
+        kubectl rollout status deployment/$DEPLOYMENT_NAME
+        kubectl get services -o wide
+© 2021 GitHub, Inc.
+Terms
+Privacy
+Security
+Status
+Docs
+Contact GitHub
+Pricing
+API
+Training
+Blog
+About
+Loading complete
