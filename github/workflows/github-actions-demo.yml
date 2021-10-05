@@ -51,9 +51,9 @@ on:
     - main
 
 env:
-  PROJECT_ID: ${{ secrets.GKE_PROJECT }}
-  GKE_CLUSTER: cluster-1    # TODO: update to cluster name
-  GKE_ZONE: europe-central2-a	   # TODO: update to cluster zone
+  PROJECT_ID: ${{ secrets.celestial-air-328108 }}
+  GKE_CLUSTER: devops-13	    # TODO: update to cluster name
+  GKE_ZONE: asia-southeast1-a	   # TODO: update to cluster zone
   DEPLOYMENT_NAME: gke-hello-app # TODO: update deployment name if changed in deployment.yaml
 
 jobs:
@@ -68,8 +68,8 @@ jobs:
     # Setup gcloud CLI
     - uses: google-github-actions/setup-gcloud@master
       with:
-        service_account_key: ${{ secrets.GKE_SA_KEY }}
-        project_id: ${{ secrets.GKE_PROJECT }}
+        service_account_key: ${{ secrets.564a092376b5878cc4f3d842c91a6071939ca1b1 }}
+        project_id: ${{ secrets.celestial-air-328108 }}
 
     # Get the GKE credentials so we can deploy to the cluster
     - run: |-
