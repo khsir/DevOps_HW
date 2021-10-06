@@ -1,5 +1,7 @@
 name:  Whatsapp Notify
 on:
+  push:
+    branches: [main]
   issue_comment:
     types: created
   pull_request:
