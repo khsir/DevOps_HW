@@ -1,43 +1,19 @@
-var baseUrl = "https://api.coinranking.com/v2/coins";
-var proxyUrl = "https://cors-anywhere.herokuapp.com/";
-var apiKey = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
+var express = require("express");
+var app = express();
+app.listen(8080, () => {
+ console.log("Server running on port 8080");
+});
 
-var apiUrl = `${proxyUrl}${baseUrl}`;
-console.log(apiUrl);
+app.get("/", (req, res) => {
+ res.send("Endpoint is live - deployment success!");
+});
 
-fetch(`${proxyUrl}${baseUrl}`, { 
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-My-Custom-Header': `${apiKey}`,
-      'Access-Control-Allow-Origin': "*"
-    }
-})
-  .then((response) => {
-    if (response.ok) {
-      response.json().then((json) => {
-        console.log(json.data);
-        let coinsData = json.data.coins;
+app.get("/random", (req, res, next) => {
+ res.json([Math.floor(Math.random() * 90) + 10]);
+});
 
-        if (coinsData.length > 0) {
-          var cryptoCoin = "";
-        }
-        //For Loop Starts
-        coinsData.forEach((coin) => {
-          cryptoCoin += "<tr>";
-          cryptoCoin += `<td> ${coin.uuid} </td>`;
-          cryptoCoin += `<td> ${coin.btcPrice} </td>`;
-          cryptoCoin += `<td> ${coin.rank}</td>`;
-          cryptoCoin += `<td> ${coin.tier} </td>`;
-          cryptoCoin += `<td> ${coin.name}</td>`;
-          cryptoCoin += `<td> $${Math.round(coin.price)} Billion</td>`;
-          cryptoCoin += `<td> ${coin.symbol}</td>`;"<tr>";
-        });
-        //For Loop Ends
-        document.getElementById("data").innerHTML = cryptoCoin;
-      });
-    }
-  })
-  .catch((error) => {
-    console.log(error);
-  });
+app.get('*',function (req, res) {
+        res.redirect('/');
+    });
+
+// node app.js
