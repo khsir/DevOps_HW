@@ -14,14 +14,21 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    
     - name: docker login
       env:
         DOCKER_USER: ${{secrets.DOCKER_USER}}
         DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
       run: |
         docker login -u $DOCKER_USER -p $DOCKER_PASSWORD 
+    
+    - name: Setup Node.js environment
+      uses: actions/setup-node@v2.4.1
+    
+    
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag khsir/devopshw:$(date +%s)
+      run: docker build -t khsir/devopshw:latest .
+
       
-    - name: Docker Push
-      run: docker push khsir/devopshw
+    - name: docker push
+      run : docker push khsir/devopshw:latest
