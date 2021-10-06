@@ -37,7 +37,7 @@ jobs:
         run: |
           gcloud run deploy helloworld \
           --region asia-southeast1 \
-          --image gcr.io/google-samples/hello-app:1.0 \
+          --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/helloworld \
           --platform managed \
           --allow-unauthenticated \
           --project ${{ secrets.GCP_PROJECT_ID }}
