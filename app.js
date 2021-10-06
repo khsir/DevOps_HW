@@ -25,9 +25,9 @@ fetch(`${proxyUrl}${baseUrl}`, {
         //For Loop Starts
         coinsData.forEach((coin) => {
           cryptoCoin += "<tr>";
-          cryptoCoin += `<td> ${coin.name}</td>`;
           cryptoCoin += `<td> ${coin.rank} </td>`;
-          cryptoCoin += `<td> US$${Math.round(coin.price)} </td>`;
+          cryptoCoin += `<td> ${coin.name}</td>`;
+          cryptoCoin += `<td> US$${Math.round(coin.price * 1000) / 1000} </td>`;
           cryptoCoin += `<td> ${coin.symbol}</td>`;"<tr>";
         });
         //For Loop Ends
