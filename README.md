@@ -62,7 +62,7 @@ To test the file, one hits Git ADD, Git Commit, Git Push Origin Main. If the wor
 
 **_Successful Deployment_**
 
-<img src ="images/dockerhub_success.JPG" width="600">
+<img src ="Images/dockerhub_success.JPG" width="600">
 
 <br>
 <br>
@@ -87,7 +87,7 @@ Upon the Github trigger, a WhatsApp notification is sent to user to notify them 
 
 **_WhatsApp Notification:_**<br>
 <br>
-<img src="images/twilio.JPG" width="600">
+<img src="Images/twilio.JPG" width="600">
 <br>
 <br>
 
@@ -103,13 +103,13 @@ Thankfully (or maybe not), Google Cloud has numerous APIs that allows users to b
 
 **_GCP Failure on .YML File:_**<br>
 <br>
-<img src="images/gcloud_failure.JPG" width="600">
+<img src="Images/gcloud_failure.JPG" width="600">
 <br>
 <br>
 
 **_GCP Success via APIs:_**<br>
 <br>
-<img src="images/gcloud_success_API.JPG" width="600">
+<img src="Images/gcloud_success_API.JPG" width="600">
 <br>
 <br>
 
