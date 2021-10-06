@@ -1,6 +1,6 @@
 var baseUrl = "https://api.coinranking.com/v2/coins";
 var proxyUrl = "https://cors-anywhere.herokuapp.com/";
-var apiKey = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
+var apiKey = "coinrankingadc88b33fa8e811714565dee6df5ec0ae6c20e74cdea4b15";
 
 var apiUrl = `${proxyUrl}${baseUrl}`;
 console.log(apiUrl);
@@ -25,12 +25,9 @@ fetch(`${proxyUrl}${baseUrl}`, {
         //For Loop Starts
         coinsData.forEach((coin) => {
           cryptoCoin += "<tr>";
-          cryptoCoin += `<td> ${coin.uuid} </td>`;
-          cryptoCoin += `<td> ${coin.btcPrice} </td>`;
-          cryptoCoin += `<td> ${coin.rank}</td>`;
-          cryptoCoin += `<td> ${coin.tier} </td>`;
           cryptoCoin += `<td> ${coin.name}</td>`;
-          cryptoCoin += `<td> $${Math.round(coin.price)} Billion</td>`;
+          cryptoCoin += `<td> ${coin.rank} </td>`;
+          cryptoCoin += `<td> US$${Math.round(coin.price)} </td>`;
           cryptoCoin += `<td> ${coin.symbol}</td>`;"<tr>";
         });
         //For Loop Ends
