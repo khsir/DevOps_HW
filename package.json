@@ -1,0 +1,19 @@
+{
+  "name": "devops_hw",
+  "version": "1.0.0",
+  "description": "CI/CD Homework for DevOps",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/khsir/DevOps_HW.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/khsir/DevOps_HW/issues"
+  },
+  "homepage": "https://github.com/khsir/DevOps_HW#readme"
+}
