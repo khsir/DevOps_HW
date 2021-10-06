@@ -1,114 +1,116 @@
 <h1 align=>NUS FinTech: DevOps CI/CD</h1>
 
-# Overview <br>
+## Overview <br>
+---
+#### A) CI/CD through GitHub Actions
 
-##### CI/CD through GitHub Actions
+GitHub Actions offers a large variety of tools for workflows. Through several failed attemps and trial & error, I settled on the following GitHub Actions:-
 
-GitHub Actions offers a large variety of tools for workflows. The two that I eventually worked with are [Docker CI] (https://github.com/khsir/DevOps_HW/blob/main/.github/workflows/docker-image.yml). 
+1. [Docker](https://github.com/khsir/DevOps_HW/blob/main/.github/workflows/docker-image.yml) which automates the build and push of the Docker image to DockerHub
+2. [WhatsApp Notification via Twilio](https://github.com/khsir/DevOps_HW/blob/main/.github/workflows/whatsapp.yml) is simultaneously triggered with a notification on the details of the change committed
+3. Google Cloud Build and Cloud Run which is done via GCP's APIs (more on that later)
 
-##### Deployed Page
+<br>
 
-The deployed page uses a javascript(JS) to connect to [coinranking] (https://coinranking.com/) API to pull information on cryptocurrencies:-
+#### B) Deployed Page
+
+The deployed page uses a javascript(JS) to connect to [coinranking](https://coinranking.com/) API to pull information on cryptocurrencies:-
 
 https://khsir.github.io/DevOps_HW/index.html
 
-
-
-The [Docker CI and Telegram Notification](https://github.com/ericiachan/devops-cicd/actions/workflows/dockerci-notify.yml) workflow automates the build and push of the Docker Image to Docker Hub, and triggers a Telegram notification with details on the changes committed, which sent is through a Telegram Bot (@devops-cicd-bot). 
-
-The [Google Cloud Run Deployment](https://github.com/ericiachan/devops-cicd/blob/main/.github/workflows/deploy.yml) workflow automates the setup, build, publishing and deployment of the project to Google Cloud Run. 
 <br>
 <br>
-## Step 1: Initialise a Repository 
 
+## Part 1: Initialise a Repository 
+---
+Initialise an empty repository and uploading the relevant files to the respository. 
 
-Begin by initializing an empty repository and uploading the necessary files to the respository. 
+For this exercise, I used a JS file that connects to an external API. The HTML file displays a table of the Top 50 largest cryptocurrencies:
+
+**_Screenshot of Webpage_**
+
+<img src ="Images/indexhtml_image.JPG" width="600">
+
 <br>
 <br>
-## Part II: Exploring GitHub Marketplace
-The [GitHub Marketplace](https://github.com/marketplace) is filled with plenty of interesting tools for workflow improvements. For this project, the intention was to include a notification action in the workflow that alerts the user on changes made with each iteration of workflow executed.
 
-Tapping into the numerous notification options available, a Telegram notification action was the eventual choice for this project.
+## Part 2: Choosing the GitHub Action (Failure)
 
-## Part III: Docker CI and Telegram Notification Workflow
-The first part of the workflow focuses on building and pushing the Docker Image to a repository in Docker Hub. Each time a Github Event (Push/Pull) is committed, the workflow will be triggered and the aforementioned action will take place. 
+I started the DevOps project with an open mind as to the choice of workflows. The first workflow I tried was [Build and Deploy to GKE](https://github.com/google-github-actions/setup-gcloud/tree/master/example-workflows/gke) - I failed miserably. There were a few reasons for that: 
+* Relatively new to Docker and hadn't yet a firm understanding of Docker Image, Containers, etc
+* Unfamiliar with the language on .YML files
+* Hadn't quite realise the difference between GKE and GCP 
+
+<br>
+<br>
+
+## Part 3: Changing Track (Docker & WhatsApp Notification)
+
+### Docker Image CI 
+Almost decided to switch to Homework #1 instead, but found this article on [medium](https://medium.com/platformer-blog/lets-publish-a-docker-image-to-docker-hub-using-a-github-action-f0b17e5cceb3). 
+
+For this .YML file, we are required to have three (3) parameters:
 
 The following parameters are required:
+* <b> username </b>: Docker username
+* <b> password </b>: Docker account's password
+* <b> tag </b>: Docker hub repository
 
-| Key                    | Input                                    | 
-| ---------------------- |------------------------------------------| 
-| <b>`username`</b>      | Docker username                          | 
-| <b>`password`</b>      | Docker account password or access token  |
-| <b>`tags`</b>          | Name of Docker repository                | 
+Each of these inputs can be written directly onto the docker-image.yml files. However, one should note that this repository is public hence personal information such as the username and password will be available to the public. It is thus important (and useful) to utilise [GitHub Secrets](https://docs.github.com/en/actions/security-guides/encrypted-secrets).
 
+To test the file, one hits Git ADD, Git Commit, Git Push Origin Main. If the workflow is successful, changes to the Docker Hub repository will be reflected.
 
-###### <i>Important Note: [Github Secrets](https://docs.github.com/en/actions/security-guides/encrypted-secrets) is key to this workflow.</i> <br>
+**_Successful Deployment_**
 
-Once the workflow has been executed successfully, changes to the Docker Hub repository should be reflected.
+<img src ="images/dockerhub_success.JPG" width="600">
 
-**_Before workflow execution:_**
-
-<img src ="images/docker-empty-repository.png" width="600">
-
-**_After workflow execution:_**
-
-<img src ="images/docker-push-success.png" width="600">
-
-
-## Sending a Telegram Notification
-Building on the existing workflow, the second half incorporates a Telegram notification action. Upon the Github Event trigger, a Telegram notification is sent to user to notify them on the changes made. 
-
-The following details are included in the Telegram notification:
-  * Github event type (E.g. Push, Pull, etc)
-  * ID of the commit made
-  * Description of the commit made
-  * User who triggered the event and made the commit
-
-To incorporate this action in the workflow, there are a number of steps to be taken:
-1. Create a Telegram Bot by speaking to the [BotFather](https://t.me/botfather). 
-2. Take note of the chat_id and token for the newly created Bot.
-3. Update the workflow <b>`.yml`</b> file to incorporate this Telegram notification action The Telegram Bot credentials are essential for this. 
-4. Commit changes and await the notification from your Bot.
-
-The following parameters are required:
-
-| Key            | Input                | 
-| ---------------|----------------------| 
-| <b>`token`</b> | Telegram Bot token   |
-| <b>`to`</b>    | Telegram Bot chat_id |
-
-
-###### <i>Important Note: [Github Secrets](https://docs.github.com/en/actions/security-guides/encrypted-secrets) is key to this workflow.</i> <br>
-
-**_Telegram Notification:_**<br>
-<br>
-<img src="images/devops-cicd-bot.png" width="400">
 <br>
 <br>
-## Part IV: Google Cloud Run Deployment Workflow 
-For this workflow, the primary steps are:
-1. Enable Google Cloud Run and Cloud Build API.
-2. Configure Google Authentication (credentials are necessary for a successful deployment).
-3. Ensure necessary files are in the Github repository. 
-4. Create workflow using Github Actions.
-5. Deploy!
 
-Live endpoint for the project: https://devops-cicd-o7v2rv5pfq-uc.a.run.app/
-<br>
-<br>
-## Part V: Workflow Status
-To verify the status of the workflow, proceed to [Actions](https://github.com/ericiachan/devops-cicd/actions). 
-> * If the workflow is successfully executed, <b>`Success`</b> will be reflected under the <b>`Status`</b> header.<br> 
-> * If there are errors in the workflow, <b>`Failure`</b> will be reflected under the <b>`Status`</b> header. 
+### WhatsApp Notify
+Building on the momentum, I decided to incorporate a push notification an instant messaging platform.  
 
-**_Workflow Status:_**<br>
-<br>
-<img src ="images/workflow-success.png" width="800">
-<br>
-<br>
-<img src ="images/docker-notify-success.png" width="800">
-<br>
-<br>
-<img src ="images/cloud-deployment-success.png" width="800">
+The steps to incorporate this action are as follows:- 
+1. Copy the [.YML](https://github.com/mdb571/wa-action/blob/master/.github/workflows/main.yml) code
+2. Create a free [Twilio](https://www.twilio.com/) account
+3. Join the Twilio WhatsApp sandbox by sending a unique code to +1 415 523 8886 (Twilio's default WhatsApp number). This allows a user to send/recieve messages from Twilio
 
+We will use the same principles as the Docker Image CI ie. GitHub Secrets:
+* <b> from </b>: Twilio's default WhatsApp numer ie. +1 415 523 8886
+* <b> to </b>: User's mobile number used to activate Twilio WhatsApp sandbox (see Step 3 above)
+* <b> account SID </b>: Twilio account SID 
+* <b> auth token </b>: Authentication token for the Twilio account SID
 
+Upon the Github trigger, a WhatsApp notification is sent to user to notify them on the changes made:
+* Github event type (e.g. Push, Pull, etc)
+* User who triggered the event and made the commit
+
+**_WhatsApp Notification:_**<br>
+<br>
+<img src="images/twilio.JPG" width="600">
+<br>
+<br>
+
+## Part 4: Google Cloud Run Deployment Workflow 
+
+Finally I had also attempted to incorporate a Google Cloud Run. 
+
+I started with a .YML file with several of the key configs contained within. However I couldn't figure out how to build an image:
+* Code: Can't figure if it is meant to be docker build -t or gcloud builds submit --tag
+* Image: Can't figure how to link it to the Dockerfile in my GitHub Repo
+
+Thankfully (or maybe not), Google Cloud has numerous APIs that allows users to build, test and deploy directly from GCP; there are also numerous resources that can help one reach that end point.
+
+**_GCP Failure on .YML File:_**<br>
+<br>
+<img src="images/gcloud_failure.JPG" width="600">
+<br>
+<br>
+
+**_GCP Success via APIs:_**<br>
+<br>
+<img src="images/gcloud_success_API.JPG" width="600">
+<br>
+<br>
+
+## Thank You!
