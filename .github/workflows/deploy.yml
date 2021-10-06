@@ -25,19 +25,21 @@ jobs:
           service_account_key: ${{ secrets.GCP_SA_KEY }}
           export_default_credentials: true
 
-      - name: Configure Docker
-        run: |
-          gcloud auth configure-docker
-            
-    -   name: Build & Publish
-        run: |
-          gcloud config set project ${{ secrets.GCP_PROJECT_ID }}
-          gcloud builds submit --tag gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_IMAGE }}
-          gcloud config set run/region asia-southeast1
-    
-    -   name: Deploy
-        run: |
-          gcloud run deploy ${{ secrets.GCP_IMAGE }} --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_IMAGE }} \
-          --platform managed \
-          --allow-unauthenticated \
-          --memory 256M
+    # Configure Docker with Credentials
+    - name: Configure Docker
+      run: |
+        gcloud auth configure-docker
+    # Build the Docker image
+    - name: Build & Publish
+      run: |
+        gcloud config set project ${{ secrets.GCP_PROJECT_ID }}
+        gcloud builds submit --tag gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_IMAGE }}
+        gcloud config set run/region us-central1
+    # Deploy the Docker image to the GKE cluster
+    - name: Deploy
+      run: |
+        gcloud run deploy ${{ secrets.GCP_IMAGE }} --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_IMAGE }} \
+        --platform managed \
+        --allow-unauthenticated \
+        --memory 256M
+
