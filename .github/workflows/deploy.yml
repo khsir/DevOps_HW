@@ -31,15 +31,8 @@ jobs:
       
       - name: Build
         run: |
-          gcloud build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_IMAGE }}
-
-      - name: Push
-        run: |
-          gcloud push gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_IMAGE }}
-
-      - name: Pull
-        run: |
-          gcloud pull gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_IMAGE }}
+          gcloud config set project ${{ secrets.GCP_PROJECT_ID }}
+          gcloud builds submit --tag gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_IMAGE }}
       
       - name: Deploy
         run: |
